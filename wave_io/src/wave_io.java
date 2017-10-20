@@ -23,7 +23,7 @@ public class wave_io
 		}
 	
 		inFilename= "doc/sine_hi01.wav"; //args[0];
-		outFilename="out_file.wav"; //args[1];
+		outFilename="doc/out_file/out_file_sine_hi01.wav"; //args[1];
 		
 		
 		//read wave data, sample contained in array readWavFile.sound
@@ -37,7 +37,8 @@ public class wave_io
 			samples = (int)numFrames*numChannels;
 			validBits = readWavFile.getValidBits();
 			sampleRate = readWavFile.getSampleRate();
-			PrintWriter writer = new PrintWriter(new FileWriter("out_file.txt"));
+			PrintWriter writer = new PrintWriter(new FileWriter("doc/out_file/out_file_sine_hi01.txt"));
+			
 			
 		
 			//long data[][] = new long[numChannels][(int)numFrames];
@@ -65,17 +66,30 @@ public class wave_io
 		try {
 
 			// 2.4 Downsampling
+			PrintWriter writerDown = new PrintWriter(new FileWriter("doc/out_file/out_file_downsampled_sine_lo01.txt"));
+			
 			for (int i=0; i < samples/2;i++) {
 				
-				// ********* ToDo *************** 	
+				readWavFile.sound[i] = readWavFile.sound[i*2]; 	
+				
+			}
+			
+			sampleRate /= 2;
+			numFrames /= 2;
+			
+			for (int i=0; i < samples;i++) {
+				writerDown.printf("%5d  %8d\n", i, readWavFile.sound[i]);
+				
 				
 			}
 			
  			// 3.2 Bitreduzierung
-			int reduced_bits = 1;
+			int reduced_bits = 3;
+			int mask = (1<<reduced_bits); // 00001000
+			mask -= 1; // 00000111
+			mask = ~mask; // 11111000
 			for (int i=0; i < samples;i++) {
-			
-				// ********* ToDo *************** 	
+				readWavFile.sound[i] &= mask;
 				
 			}
 			
